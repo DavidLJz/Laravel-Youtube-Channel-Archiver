@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/add_channel', function () {
+    return view('add_channel');
+});
