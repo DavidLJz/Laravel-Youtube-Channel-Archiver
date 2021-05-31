@@ -13,6 +13,12 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::middleware('api')
+    ->post('add_channels', 'YoutubeController@addChannels')
+    ->name('yt.add_channels');
+
+/*
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+*/
