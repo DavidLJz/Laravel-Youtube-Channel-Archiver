@@ -41,19 +41,13 @@ class YoutubeController extends Controller
                         continue;
                     }
 
-                    $yt_id = $r->id;
-                    $name = $r->snippet->title;
-                    $video_count = $r->statistics->videoCount ?? 0;
-
                     $channel = new channel;
-                    $channel->yt_id = $yt_id;
-                    $channel->name = $name;
-                    $channel->video_count = $video_count;
+                    $channel->yt_id = $r->id;
+                    $channel->name = $r->snippet->title;
+                    $channel->video_count = $r->statistics->videoCount ?? 0;
                     $channel->save();
 
-                    $pk = $channel->pk;
-
-                    $channels[] = compact('pk','yt_id','name','video_count');
+                    $channels[] = $channel->toArray();
                 }
 
                 catch (\Throwable $e) {
