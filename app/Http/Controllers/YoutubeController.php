@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Alaouy\Youtube\Facades\Youtube;
 use Illuminate\Http\Request;
+use App\Services\YoutubeService;
 
 use App\Models\channel;
 
@@ -24,35 +25,25 @@ class YoutubeController extends Controller
         $channels = [];
         $data = $request->only(['ids','names']);
 
-        $methods = [
-            'names' => 'Youtube::getChannelByName',
-            'ids' => 'Youtube::getChannelById',
-        ];
+        $yt = new YoutubeService;
 
         foreach ($data as $type => $values) {
             $values = array_filter($values);
 
             foreach ($values as $val) {
-                try {
-                    $method = $methods[$type];
-                    $r = call_user_func($method, $val);
+                $r = $yt->getChannel($val, $type);
 
-                    if (empty($r)) {
-                        continue;
-                    }
-
-                    $channel = new channel;
-                    $channel->yt_id = $r->id;
-                    $channel->name = $r->snippet->title;
-                    $channel->video_count = $r->statistics->videoCount ?? 0;
-                    $channel->save();
-
-                    $channels[] = $channel->toArray();
+                if (empty($r)) {
+                    continue;
                 }
 
-                catch (\Throwable $e) {
-                    \Log::error($e->getMessage());
-                }
+                $channel = new channel;
+                $channel->yt_id = $r->id;
+                $channel->name = $r->snippet->title;
+                $channel->video_count = $r->statistics->videoCount ?? 0;
+                $channel->save();
+
+                $channels[] = $channel->toArray();
             }
         }
 
