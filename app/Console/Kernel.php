@@ -5,6 +5,8 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
+use App\Tasks\RefetchMetadata;
+
 class Kernel extends ConsoleKernel
 {
     /**
@@ -26,6 +28,9 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+
+        // todo: custom hour to update video metadata
+        $schedule->call(new RefetchMetadata)->daily();
     }
 
     /**
