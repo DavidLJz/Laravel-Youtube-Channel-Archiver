@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Alaouy\Youtube\Facades\Youtube;
 use Illuminate\Http\Request;
 use App\Services\YoutubeService;
-
+use App\Jobs\FetchChannelVideosMetadata;
 use App\Models\channel;
 
 class YoutubeController extends Controller
@@ -51,6 +51,8 @@ class YoutubeController extends Controller
                 $channel->save();
 
                 $channels[] = $channel->toArray();
+
+                FetchChannelVideosMetadata::dispatch($channel->pk);
             }
         }
 
