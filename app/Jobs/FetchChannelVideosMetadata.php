@@ -21,6 +21,8 @@ class FetchChannelVideosMetadata implements ShouldQueue
     protected $channel_pk;
     protected $page_token;
 
+    public $tries = 3;
+
     /**
      * Create a new job instance.
      *
@@ -42,9 +44,8 @@ class FetchChannelVideosMetadata implements ShouldQueue
         $channel = channel::find($this->channel_pk);
 
         if (empty($channel)) {
-            throw new \Exception(
-                "Channel with primary key {$this->channel_pk} not found"
-            );
+            \Log::error('Channel not found', [ 'pk' => $this->channel_pk ]);
+            return;
         }
 
         $yt = new YoutubeService;
