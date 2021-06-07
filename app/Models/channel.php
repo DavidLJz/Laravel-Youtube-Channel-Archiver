@@ -12,4 +12,9 @@ class channel extends Model
     {
         return $this->hasMany('App\Models\video', 'channel_pk');
     }
+
+    public function video_metadata_sync_log()
+    {
+        return $this->hasMany('App\Models\video_metadata_sync_log', 'channel_pk');
+    }
 }
