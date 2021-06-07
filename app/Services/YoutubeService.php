@@ -40,25 +40,32 @@ class YoutubeService
 		}
 
         catch (\Throwable $e) {
-            \Log::error($e->getMessage());
+            \Log::error( $e->__toString() );
             return null;
         }
 	}
 
-	public function getVideoList(string $channel_id, int $count=20) :?array
+	public function getVideoList(string $channel_id, string $page_token='', int $count=20) :?array
 	{
-		$list = Youtube::listChannelVideos($channel_id, $count, 'date');
+		$response = Youtube::searchAdvanced([
+            'type' => 'video',
+            'channelId' => $channel_id,
+            'part' => 'id,snippet',
+            'maxResults' => $count,
+            'order' => 'date',
+            'pageToken' => $page_token
+        ], true);
 
-		if (empty($list)) {
+		if (empty($response['results'])) {
 			return null;
 		}
 
-		$videos = [];
+		$data = [ 'videos' => [], 'pagination' => $response['info'] ];
 
-		foreach ($list as $item) {
+		foreach ($response['results'] as $item) {
 			$thumbnail = $item->snippet->thumbnails->high->url;
 
-			$videos[] = [
+			$data['videos'][] = [
 				'yt_id' => $item->id->videoId,
 				'title' => $item->snippet->title,
 				'description' => $item->snippet->description,
@@ -67,6 +74,6 @@ class YoutubeService
 			];
 		}
 
-		return $videos;
+		return $data;
 	}
 }

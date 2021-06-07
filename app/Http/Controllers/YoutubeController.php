@@ -23,7 +23,7 @@ class YoutubeController extends Controller
 	public function addChannels(Request $request)
 	{
         $channels = [];
-        $data = $request->only(['ids','names']);
+        $data = $request->only(['id','name']);
 
         $yt = new YoutubeService;
 
@@ -33,7 +33,13 @@ class YoutubeController extends Controller
             foreach ($values as $val) {
                 $r = $yt->getChannel($val, $type);
 
-                if (empty($r)) {
+                if ( empty($r) ) {
+                    continue;
+                }
+
+                $exists = channel::select(['pk'])->firstWhere('yt_id', $r->id);
+
+                if ( !empty($exists) ) {
                     continue;
                 }
 
@@ -41,6 +47,7 @@ class YoutubeController extends Controller
                 $channel->yt_id = $r->id;
                 $channel->name = $r->snippet->title;
                 $channel->video_count = $r->statistics->videoCount ?? 0;
+                $channel->custom_url = $r->snippet->customUrl ?? null;
                 $channel->save();
 
                 $channels[] = $channel->toArray();

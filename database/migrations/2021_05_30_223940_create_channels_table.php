@@ -16,8 +16,9 @@ class CreateChannelsTable extends Migration
         Schema::create('channels', function (Blueprint $table) {
             $table->bigIncrements('pk');
 
-            $table->string('yt_id');
             $table->string('name');
+            $table->string('yt_id', 50)->unique();
+            $table->string('custom_url', 50)->nullable(true);
             $table->integer('video_count');
 
             $table->timestamps();

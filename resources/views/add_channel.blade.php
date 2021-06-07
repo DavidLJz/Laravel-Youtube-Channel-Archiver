@@ -13,18 +13,18 @@
 		<div id="channel-input-list">
 			<div class="channel-input">
 				<label for="c-name-1">Channel name</label>
-				<input type="text" id="c-name-1" name="names[]">
+				<input type="text" id="c-name-1" name="name[]">
 
 				<label for="c-id-1">Channel ID</label>
-				<input type="text" id="c-id-1" name="ids[]">
+				<input type="text" id="c-id-1" name="id[]">
 			</div>
 
 			<div class="channel-input">
 				<label for="c-name-2">Channel name</label>
-				<input type="text" id="c-name-2" name="names[]">
+				<input type="text" id="c-name-2" name="name[]">
 
 				<label for="c-id-2">Channel ID</label>
-				<input type="text" id="c-id-2" name="ids[]">
+				<input type="text" id="c-id-2" name="id[]">
 			</div>
 		</div>
 
@@ -45,8 +45,8 @@
 			container.classList = 'channel-input';
 
 			const inputs = [
-				{ label : 'Channel Name', id : 'c-name-', name : 'names[]' },
-				{ label : 'Channel ID', id : 'c-id-', name : 'ids[]' },
+				{ label : 'Channel Name', id : 'c-name-', name : 'name[]' },
+				{ label : 'Channel ID', id : 'c-id-', name : 'id[]' },
 			];
 
 			for (const i in inputs) {
