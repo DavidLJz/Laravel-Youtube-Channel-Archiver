@@ -82,7 +82,9 @@ class FetchChannelVideosMetadata implements ShouldQueue
         }
 
         if ( !empty($response['pagination']['nextPageToken']) ) {
-            self::dispatch($this->channel_pk, $next_ptoken)->delay(
+            $next_page = $response['pagination']['nextPageToken'];
+
+            self::dispatch($this->channel_pk, $next_page)->delay(
                 now()->addMinutes(1)
             );
         }
